@@ -1,5 +1,7 @@
 package arraysnstrings
 
+import "sort"
+
 // # 1.1
 //
 // Is Unique: Implement an algorithm to determine if a string has all unique characters. What if you
@@ -19,6 +21,20 @@ func IsUnique(s string) bool {
 	return true
 }
 
+type SortString []byte
+
+func (s *SortString) Len() int {
+	return len(*s)
+}
+
+func (s *SortString) Less(i, j int) bool {
+	return (*s)[i] < (*s)[j]
+}
+
+func (s *SortString) Swap(i, j int) {
+	(*s)[i], (*s)[j] = (*s)[j], (*s)[i]
+}
+
 // # 1.2
 //
 // Check Permutation: Given two strings, write a method to decide if one is a permutation of the
@@ -26,6 +42,18 @@ func IsUnique(s string) bool {
 //
 // CheckPermutation return true if one is a permutation of the other, and versa
 func CheckPermutation(s1, s2 string) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	v1 := SortString(s1)
+	v2 := SortString(s2)
+	sort.Sort(&v1)
+	sort.Sort(&v2)
+	for i, v := range v1 {
+		if v != v2[i] {
+			return false
+		}
+	}
 	return true
 }
 
