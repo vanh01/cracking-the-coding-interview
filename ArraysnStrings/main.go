@@ -1,6 +1,9 @@
 package arraysnstrings
 
-import "sort"
+import (
+	"sort"
+	"strings"
+)
 
 // # 1.1
 //
@@ -69,7 +72,26 @@ func CheckPermutation(s1, s2 string) bool {
 // Input: "Mr John Smith     ", 13
 //
 // Output: "Mr%20John%20Smith"
-func URLify() {}
+func URLify(s string, l int) string {
+	result := strings.Builder{}
+	for i, c := range s {
+		if i == l {
+			break
+		}
+		if c != ' ' {
+			_, err := result.WriteRune(c)
+			if err != nil {
+				return ""
+			}
+		} else if c == ' ' {
+			_, err := result.WriteString("%20")
+			if err != nil {
+				return ""
+			}
+		}
+	}
+	return result.String()
+}
 
 // # 1.4
 //

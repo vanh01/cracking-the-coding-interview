@@ -76,3 +76,42 @@ func TestCheckPermutation(t *testing.T) {
 		require.Equal(t, testCase.Result, result)
 	}
 }
+
+func TestURLify(t *testing.T) {
+	testCases := []struct {
+		S      string
+		L      int
+		Result string
+	}{
+		{
+			S:      "Mr John Smith     ",
+			L:      13,
+			Result: "Mr%20John%20Smith",
+		},
+		{
+			S:      "Mr John Smith S      ",
+			L:      15,
+			Result: "Mr%20John%20Smith%20S",
+		},
+		{
+			S:      "a",
+			L:      1,
+			Result: "a",
+		},
+		{
+			S:      "",
+			L:      0,
+			Result: "",
+		},
+		{
+			S:      " a  ",
+			L:      2,
+			Result: "%20a",
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.URLify(testCase.S, testCase.L)
+		require.Equal(t, testCase.Result, result)
+	}
+}
