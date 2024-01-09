@@ -104,7 +104,27 @@ func URLify(s string, l int) string {
 // Input: Tact Coa
 //
 // Output: True (permutations: "taco cat", "atco eta", etc.)
-func PalindromePermutation() {}
+func PalindromePermutation(s string) bool {
+	m := make(map[rune]int)
+	for _, c := range s {
+		if _, ok := m[c]; ok {
+			m[c]++
+		} else {
+			m[c] = 1
+		}
+	}
+
+	sign := false
+	for _, v := range m {
+		if v%2 != 0 {
+			if sign == true {
+				return false
+			}
+			sign = true
+		}
+	}
+	return true
+}
 
 // # 1.5
 //

@@ -115,3 +115,40 @@ func TestURLify(t *testing.T) {
 		require.Equal(t, testCase.Result, result)
 	}
 }
+
+func TestPalindromePermutation(t *testing.T) {
+	testCases := []struct {
+		S      string
+		Result bool
+	}{
+		{
+			S:      "abcd",
+			Result: false,
+		},
+		{
+			S:      "aa",
+			Result: true,
+		},
+		{
+			S:      "",
+			Result: true,
+		},
+		{
+			S:      "a",
+			Result: true,
+		},
+		{
+			S:      "avcavc ",
+			Result: true,
+		},
+		{
+			S:      "abcdabc ",
+			Result: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.PalindromePermutation(testCase.S)
+		require.Equal(t, testCase.Result, result)
+	}
+}
