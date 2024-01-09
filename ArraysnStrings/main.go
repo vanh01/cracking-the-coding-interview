@@ -1,6 +1,7 @@
 package arraysnstrings
 
 import (
+	"math"
 	"sort"
 	"strings"
 )
@@ -141,7 +142,46 @@ func PalindromePermutation(s string) bool {
 // pale, bale -> true
 //
 // pale, bake -> false
-func OneAway() {}
+func OneAway(s1, s2 string) bool {
+	l1, l2 := len(s1), len(s2)
+	if math.Abs(float64(l1-l2)) > 1 {
+		return false
+	}
+	if l1 == l2 {
+		flag := false
+		for i := range s1 {
+			if s1[i] != s2[i] {
+				if flag {
+					return false
+				}
+				flag = true
+			}
+		}
+		return true
+	} else if l1 < l2 {
+		diff := 0
+		for i := 0; i < l1 && i+diff < l2; i++ {
+			if s1[i] != s2[i+diff] {
+				diff++
+			}
+			if diff > 1 {
+				return false
+			}
+		}
+		return true
+	} else {
+		diff := 0
+		for i := 0; i+diff < l1 && i < l2; i++ {
+			if s1[i+diff] != s2[i] {
+				diff++
+			}
+			if diff > 1 {
+				return false
+			}
+		}
+		return true
+	}
+}
 
 // # 1.6
 //
