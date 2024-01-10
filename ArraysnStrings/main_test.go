@@ -361,3 +361,37 @@ func TestZeroMatrix(t *testing.T) {
 		}
 	}
 }
+
+func TestStringRotation(t *testing.T) {
+	testCases := []struct {
+		s1     string
+		s2     string
+		result bool
+	}{
+		{
+			s1:     "abcd",
+			s2:     "cdab",
+			result: true,
+		},
+		{
+			s1:     "abcd",
+			s2:     "cdba",
+			result: false,
+		},
+		{
+			s1:     "",
+			s2:     "",
+			result: true,
+		},
+		{
+			s1:     "a",
+			s2:     "a",
+			result: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.StringRotation(testCase.s1, testCase.s2)
+		require.Equal(t, testCase.result, result)
+	}
+}

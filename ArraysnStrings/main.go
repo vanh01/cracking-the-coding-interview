@@ -286,7 +286,16 @@ func ZeroMatrix(matrix [][]int, m, n int) [][]int {
 
 // # 1.9
 //
-// String Rotation:Assumeyou have a method isSubstringwhich checks if oneword is a substring
-// of another. Given two strings, sl and s2, write code to check if s2 is a rotation of sl using only one
-// call to isSubstring (e.g., "waterbottle" is a rotation of"erbottlewat").
-func StringRotation() {}
+// String Rotation: Assume you have a method isSubstring which checks if one word is a substring
+// of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one
+// call to isSubstring (e.g., "waterbottle" is a rotation of "erbottlewat").
+func StringRotation(s1, s2 string) bool {
+	if len(s1) != len(s2) || len(s1) < 0 {
+		return false
+	}
+	if len(s1) == 0 {
+		return true
+	}
+	dupS1 := s1 + s1
+	return strings.Contains(dupS1, s2)
+}
