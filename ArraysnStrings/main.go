@@ -254,7 +254,35 @@ func RotateMatrix(matrix [][]int, n int, direction int) [][]int {
 //
 // Zero Matrix: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and
 // column are set to 0.
-func ZeroMatrix() {}
+func ZeroMatrix(matrix [][]int, m, n int) [][]int {
+	is := make(map[int]struct{})
+	js := make(map[int]struct{})
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if matrix[i][j] == 0 {
+				if _, exist := is[i]; !exist {
+					is[i] = struct{}{}
+				}
+				if _, exist := js[j]; !exist {
+					js[j] = struct{}{}
+				}
+			}
+		}
+	}
+
+	for i := range is {
+		for j := 0; j < n; j++ {
+			matrix[i][j] = 0
+		}
+	}
+
+	for j := range js {
+		for i := 0; i < m; i++ {
+			matrix[i][j] = 0
+		}
+	}
+	return matrix
+}
 
 // # 1.9
 //

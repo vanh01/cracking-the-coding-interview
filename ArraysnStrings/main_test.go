@@ -286,3 +286,78 @@ func TestRotateMatrix(t *testing.T) {
 		}
 	}
 }
+
+func TestZeroMatrix(t *testing.T) {
+	testCases := []struct {
+		matrix [][]int
+		m      int
+		n      int
+		result [][]int
+	}{
+		{
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			m: 3,
+			n: 3,
+			result: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+		},
+		{
+			matrix: [][]int{
+				{1, 0, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			m: 3,
+			n: 3,
+			result: [][]int{
+				{0, 0, 0},
+				{4, 0, 6},
+				{7, 0, 9},
+			},
+		},
+		{
+			matrix: [][]int{
+				{1, 0, 0, 1},
+				{4, 5, 6, 3},
+				{7, 8, 9, 9},
+			},
+			m: 3,
+			n: 4,
+			result: [][]int{
+				{0, 0, 0, 0},
+				{4, 0, 0, 3},
+				{7, 0, 0, 9},
+			},
+		},
+		{
+			matrix: [][]int{
+				{1, 0, 0, 1, 3, 4, 8},
+				{4, 5, 6, 3, 2, 0, 4},
+				{7, 8, 9, 9, 6, 7, 8},
+			},
+			m: 3,
+			n: 7,
+			result: [][]int{
+				{0, 0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0, 0},
+				{7, 0, 0, 9, 6, 0, 8},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.ZeroMatrix(testCase.matrix, testCase.m, testCase.n)
+		for i := 0; i < testCase.m; i++ {
+			for j := 0; j < testCase.n; j++ {
+				require.Equal(t, testCase.result[i][j], result[i][j])
+			}
+		}
+	}
+}
