@@ -1,6 +1,7 @@
 package arraysnstrings
 
 import (
+	"fmt"
 	"math"
 	"sort"
 	"strings"
@@ -179,10 +180,48 @@ func OneAway(s1, s2 string) bool {
 // # 1.6
 //
 // String Compression: Implement a method to perform basic string compression using the counts
-// of repeated characters. For example, the string aabcccccaaa would become a2blc5a3. If the
+// of repeated characters. For example, the string aabcccccaaa would become a2b1c5a3. If the
 // "compressed" string would not become smaller than the original string, your method should return
 // the original string. You can assume the string has only uppercase and lowercase letters (a - z).
-func StringCompression() {}
+func StringCompression(s string) string {
+	result := strings.Builder{}
+	if len(s) == 0 {
+		return ""
+	}
+
+	current := rune(s[0])
+	count := 1
+	err := result.WriteByte(s[0])
+	if err != nil {
+		return result.String()
+	}
+	for _, c := range s[1:] {
+		if c != current {
+			_, err := result.WriteString(fmt.Sprint(count))
+			if err != nil {
+				return result.String()
+			}
+			_, err = result.WriteRune(c)
+			if err != nil {
+				return result.String()
+			}
+			current = c
+			count = 1
+		} else {
+			count++
+		}
+	}
+	_, err = result.WriteString(fmt.Sprint(count))
+	if err != nil {
+		return result.String()
+	}
+
+	if result.Len() >= len(s) {
+		return s
+	}
+
+	return result.String()
+}
 
 // # 1.7
 //

@@ -201,3 +201,40 @@ func TestOneWay(t *testing.T) {
 		require.Equal(t, testCase.Result, result)
 	}
 }
+
+func TestStringCompression(t *testing.T) {
+	testCases := []struct {
+		S      string
+		Result string
+	}{
+		{
+			S:      "abcd",
+			Result: "abcd",
+		},
+		{
+			S:      "aaaa",
+			Result: "a4",
+		},
+		{
+			S:      "aabcccccaaa",
+			Result: "a2b1c5a3",
+		},
+		{
+			S:      "",
+			Result: "",
+		},
+		{
+			S:      "a",
+			Result: "a",
+		},
+		{
+			S:      "aaaab",
+			Result: "a4b1",
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.StringCompression(testCase.S)
+		require.Equal(t, testCase.Result, result)
+	}
+}
