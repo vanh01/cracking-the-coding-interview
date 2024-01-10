@@ -238,3 +238,51 @@ func TestStringCompression(t *testing.T) {
 		require.Equal(t, testCase.Result, result)
 	}
 }
+
+func TestRotateMatrix(t *testing.T) {
+	testCases := []struct {
+		matrix    [][]int
+		n         int
+		direction int
+		result    [][]int
+	}{
+		{
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			n:         3,
+			direction: 1,
+			result: [][]int{
+				{7, 4, 1},
+				{8, 5, 2},
+				{9, 6, 3},
+			},
+		},
+		{
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			n:         3,
+			direction: -1,
+			result: [][]int{
+				{3, 6, 9},
+				{2, 5, 8},
+				{1, 4, 7},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.RotateMatrix(testCase.matrix, testCase.n, testCase.direction)
+		for i := 0; i < testCase.n; i++ {
+
+			for j := 0; j < testCase.n; j++ {
+				require.Equal(t, testCase.result[i][j], result[i][j])
+			}
+		}
+	}
+}

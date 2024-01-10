@@ -227,7 +227,28 @@ func StringCompression(s string) string {
 //
 // Rotate Matrix: Given an image represented by an NxN matrix, where each pixel in the image is 4
 // bytes, write a method to rotate the image by 90 degrees. Can you do this in place?
-func RotateMatrix() {}
+func RotateMatrix(matrix [][]int, n int, direction int) [][]int {
+	result := make([][]int, n)
+	for i := 0; i < n; i++ {
+		result[i] = make([]int, n)
+	}
+
+	maxIndex := n - 1
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			var iNew, jNew int
+			if direction == 1 {
+				iNew = j
+				jNew = maxIndex - i
+			} else if direction == -1 {
+				iNew = maxIndex - j
+				jNew = i
+			}
+			result[iNew][jNew] = matrix[i][j]
+		}
+	}
+	return result
+}
 
 // # 1.8
 //
