@@ -147,21 +147,17 @@ func OneAway(s1, s2 string) bool {
 	if math.Abs(float64(l1-l2)) > 1 {
 		return false
 	}
-	if l1 == l2 {
-		flag := false
-		for i := range s1 {
-			if s1[i] != s2[i] {
-				if flag {
-					return false
-				}
-				flag = true
-			}
-		}
-		return true
-	} else if l1 < l2 {
+
+	check := func(short, long string) bool {
+		l1, l2 := len(short), len(long)
 		diff := 0
+		equal := l1 == l2
 		for i := 0; i < l1 && i+diff < l2; i++ {
-			if s1[i] != s2[i+diff] {
+			if equal {
+				if short[i] != long[i] {
+					diff++
+				}
+			} else if short[i] != long[i+diff] {
 				diff++
 			}
 			if diff > 1 {
@@ -169,17 +165,14 @@ func OneAway(s1, s2 string) bool {
 			}
 		}
 		return true
+	}
+
+	if l1 == l2 {
+		return check(s1, s2)
+	} else if l1 < l2 {
+		return check(s1, s2)
 	} else {
-		diff := 0
-		for i := 0; i+diff < l1 && i < l2; i++ {
-			if s1[i+diff] != s2[i] {
-				diff++
-			}
-			if diff > 1 {
-				return false
-			}
-		}
-		return true
+		return check(s2, s1)
 	}
 }
 
