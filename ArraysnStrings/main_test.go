@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	arraysnstrings "arraynstring/ArraysnStrings"
+	arraysnstrings "github.com/vanh01/cracking-the-coding-interview/ArraysnStrings"
 )
 
 func TestIsUnique(t *testing.T) {

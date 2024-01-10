@@ -1,4 +1,4 @@
-module arraynstring
+module github.com/vanh01/cracking-the-coding-interview
 
 go 1.21.4
 
