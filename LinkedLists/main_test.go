@@ -1,6 +1,7 @@
 package linkedlists_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -133,6 +134,46 @@ func TestDeleteAt(t *testing.T) {
 		}
 		linkedList.DeleteAt(testCase.index)
 		require.Equal(t, testCase.result, linkedList.Root.ToArray())
+	}
+}
+
+func randomNode(l int) *linkedlists.Node[int] {
+	root := &linkedlists.Node[int]{
+		Data: 1,
+	}
+	node := root
+	for i := 1; i < l; i++ {
+		node.Next = &linkedlists.Node[int]{
+			Data: i + 1,
+		}
+		node = node.Next
+	}
+	return root
+}
+
+func TestDeepCopy(t *testing.T) {
+	testCases := []*linkedlists.Node[int]{
+		{},
+		randomNode(1),
+		randomNode(10),
+		randomNode(5),
+	}
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase,
+		}
+		result := linkedList.DeepCopy()
+		root1 := linkedList.Root
+		root2 := result.Root
+
+		for root1 != nil {
+			fmt.Println("Begining traveling all node")
+			fmt.Printf(">>> node1: %v, node2: %v\n", root1, root2)
+			require.Equal(t, root1.Data, root2.Data)
+			require.NotSame(t, root1, root2)
+			root1 = root1.Next
+			root2 = root2.Next
+		}
 	}
 }
 

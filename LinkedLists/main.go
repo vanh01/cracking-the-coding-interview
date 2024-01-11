@@ -15,6 +15,7 @@ type LinkedList[T any] struct {
 // Append inserts node at last index
 func (l *LinkedList[T]) Append(next *Node[T]) {
 	endNode := l.Root
+	l.Length++
 	for endNode.Next != nil {
 		endNode = endNode.Next
 	}
@@ -22,6 +23,7 @@ func (l *LinkedList[T]) Append(next *Node[T]) {
 }
 
 func (l *LinkedList[T]) InsertAt(new *Node[T], index int) {
+	l.Length++
 	if index <= 0 {
 		new.Next = l.Root
 		l.Root = new
@@ -40,6 +42,7 @@ func (l *LinkedList[T]) InsertAt(new *Node[T], index int) {
 }
 
 func (l *LinkedList[T]) DeleteAt(index int) {
+	l.Length--
 	if index == 0 {
 		l.Root = l.Root.Next
 		return
@@ -56,6 +59,24 @@ func (l *LinkedList[T]) DeleteAt(index int) {
 	}
 	nextNode := deleteNode.Next
 	indexNode.Next = nextNode
+}
+
+func (l *LinkedList[T]) DeepCopy() *LinkedList[T] {
+	return &LinkedList[T]{
+		Root:   deepCopy[T](l.Root),
+		Length: l.Length,
+	}
+}
+
+func deepCopy[T any](n *Node[T]) *Node[T] {
+	if n == nil {
+		return nil
+	}
+	newNode := &Node[T]{
+		Data: n.Data,
+		Next: deepCopy[T](n.Next),
+	}
+	return newNode
 }
 
 func (n *Node[T]) ToArray() []T {
@@ -83,8 +104,10 @@ func (n *Node[T]) ToArray() []T {
 //
 // How would you solve this problem if a temporary buffer is not allowed?
 func RemoveDups[T comparable](l *LinkedList[T]) *LinkedList[T] {
-	result := &LinkedList[T]{}
-	*result = *l
+	result := &LinkedList[T]{
+		Root:   deepCopy[T](l.Root),
+		Length: l.Length,
+	}
 	node := result.Root
 	var preNode *Node[T]
 	data := make(map[T]struct{})
