@@ -306,3 +306,28 @@ func TestReturnKthToLast(t *testing.T) {
 		require.Equal(t, testCase.result, result.Root.ToArray())
 	}
 }
+
+func TestDeleteMiddleNode(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		result []int
+	}{
+		{node: randomNode(10)},
+		{node: randomNode(9)},
+		{node: randomNode(3)},
+		{node: randomNode(2)},
+		{node: randomNode(1)},
+	}
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		expected := testCase.node.ToArray()
+		middle := (linkedList.Length() - 1) / 2
+		if middle > 0 {
+			expected = append(expected[:middle], expected[middle+1:]...)
+		}
+		linkedlists.DeleteMiddleNode[int](linkedList)
+		require.Equal(t, expected, linkedList.Root.ToArray())
+	}
+}

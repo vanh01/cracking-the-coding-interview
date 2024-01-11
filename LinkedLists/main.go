@@ -152,7 +152,17 @@ func ReturnKthToLast[T any](l *LinkedList[T], k int) *LinkedList[T] {
 // lnput:the node c from the linked lista->b->c->d->e->f
 //
 // Result: nothing is returned, but the new linked list looks like a->b->d->e->f
-func DeleteMiddleNode() {}
+func DeleteMiddleNode[T any](l *LinkedList[T]) {
+	length := l.Length()
+	middle := (length - 1) / 2
+	if length == 0 {
+		return
+	}
+	if middle == 0 {
+		return
+	}
+	l.DeleteAt(middle)
+}
 
 // Partition: Write code to partition a linked list around a value x, such that all nodes less than x come
 // before all nodes greater than or equal to x. If x is contained within the list, the values of x only need
