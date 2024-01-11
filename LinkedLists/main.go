@@ -8,14 +8,12 @@ type Node[T any] struct {
 }
 
 type LinkedList[T any] struct {
-	Root   *Node[T]
-	Length int
+	Root *Node[T]
 }
 
 // Append inserts node at last index
 func (l *LinkedList[T]) Append(next *Node[T]) {
 	endNode := l.Root
-	l.Length++
 	for endNode.Next != nil {
 		endNode = endNode.Next
 	}
@@ -23,7 +21,6 @@ func (l *LinkedList[T]) Append(next *Node[T]) {
 }
 
 func (l *LinkedList[T]) InsertAt(new *Node[T], index int) {
-	l.Length++
 	if index <= 0 {
 		new.Next = l.Root
 		l.Root = new
@@ -42,7 +39,6 @@ func (l *LinkedList[T]) InsertAt(new *Node[T], index int) {
 }
 
 func (l *LinkedList[T]) DeleteAt(index int) {
-	l.Length--
 	if index == 0 {
 		l.Root = l.Root.Next
 		return
@@ -63,9 +59,18 @@ func (l *LinkedList[T]) DeleteAt(index int) {
 
 func (l *LinkedList[T]) DeepCopy() *LinkedList[T] {
 	return &LinkedList[T]{
-		Root:   deepCopy[T](l.Root),
-		Length: l.Length,
+		Root: deepCopy[T](l.Root),
 	}
+}
+
+func (l *LinkedList[T]) Length() int {
+	i := 0
+	node := l.Root
+	for node != nil {
+		node = node.Next
+		i++
+	}
+	return i
 }
 
 func deepCopy[T any](n *Node[T]) *Node[T] {
@@ -105,8 +110,7 @@ func (n *Node[T]) ToArray() []T {
 // How would you solve this problem if a temporary buffer is not allowed?
 func RemoveDups[T comparable](l *LinkedList[T]) *LinkedList[T] {
 	result := &LinkedList[T]{
-		Root:   deepCopy[T](l.Root),
-		Length: l.Length,
+		Root: deepCopy[T](l.Root),
 	}
 	node := result.Root
 	var preNode *Node[T]
@@ -125,8 +129,18 @@ func RemoveDups[T comparable](l *LinkedList[T]) *LinkedList[T] {
 }
 
 // Return Kth to Last: Implement an algorithm to find the kth to last element of a singly linked list.
-func ReturnKthToLast[T any](l *LinkedList[T]) {
-
+func ReturnKthToLast[T any](l *LinkedList[T], k int) *LinkedList[T] {
+	result := &LinkedList[T]{
+		Root: deepCopy[T](l.Root),
+	}
+	node := result.Root
+	i := 0
+	for node != nil && i < k {
+		node = node.Next
+		i++
+	}
+	result.Root = node
+	return result
 }
 
 // Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but

@@ -138,6 +138,9 @@ func TestDeleteAt(t *testing.T) {
 }
 
 func randomNode(l int) *linkedlists.Node[int] {
+	if l <= 0 {
+		return nil
+	}
 	root := &linkedlists.Node[int]{
 		Data: 1,
 	}
@@ -153,7 +156,7 @@ func randomNode(l int) *linkedlists.Node[int] {
 
 func TestDeepCopy(t *testing.T) {
 	testCases := []*linkedlists.Node[int]{
-		{},
+		nil,
 		randomNode(1),
 		randomNode(10),
 		randomNode(5),
@@ -166,14 +169,33 @@ func TestDeepCopy(t *testing.T) {
 		root1 := linkedList.Root
 		root2 := result.Root
 
+		fmt.Println("Begining traveling all node")
 		for root1 != nil {
-			fmt.Println("Begining traveling all node")
 			fmt.Printf(">>> node1: %v, node2: %v\n", root1, root2)
 			require.Equal(t, root1.Data, root2.Data)
 			require.NotSame(t, root1, root2)
 			root1 = root1.Next
 			root2 = root2.Next
 		}
+	}
+}
+
+func TestGetLength(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		result int
+	}{
+		{node: randomNode(0), result: 0},
+		{node: randomNode(1), result: 1},
+		{node: randomNode(5), result: 5},
+		{node: randomNode(10), result: 10},
+	}
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		result := linkedList.Length()
+		require.Equal(t, testCase.result, result)
 	}
 }
 
@@ -225,6 +247,62 @@ func TestRemoveDups(t *testing.T) {
 			Root: testCase.node,
 		}
 		result := linkedlists.RemoveDups[int](linkedList)
+		require.Equal(t, testCase.result, result.Root.ToArray())
+	}
+}
+
+func TestReturnKthToLast(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		k      int
+		result []int
+	}{
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			k:      1,
+			result: []int{2, 3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			k:      2,
+			result: []int{3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{
+						Data: 3,
+						Next: &linkedlists.Node[int]{
+							Data: 4,
+							Next: &linkedlists.Node[int]{Data: 5},
+						},
+					},
+				},
+			},
+			k:      2,
+			result: []int{3, 4, 5},
+		},
+	}
+
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		result := linkedlists.ReturnKthToLast[int](linkedList, testCase.k)
 		require.Equal(t, testCase.result, result.Root.ToArray())
 	}
 }
