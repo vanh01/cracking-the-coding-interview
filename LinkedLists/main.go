@@ -1,5 +1,7 @@
 package linkedlists
 
+import "fmt"
+
 type Node[T any] struct {
 	Data T
 	Next *Node[T]
@@ -61,11 +63,16 @@ func (n *Node[T]) ToArray() []T {
 		return make([]T, 0)
 	}
 	var ts []T
-	endNode := n
-	ts = append(ts, endNode.Data)
-	for endNode.Next != nil {
-		endNode = endNode.Next
-		ts = append(ts, endNode.Data)
+	node := n
+	fmt.Println("Begining transfering from linked list to array")
+	for node != nil {
+		if node.Next != nil {
+			fmt.Printf(">>: %v,\n", node.Data)
+		} else {
+			fmt.Printf(">>: %v.\n", node.Data)
+		}
+		ts = append(ts, node.Data)
+		node = node.Next
 	}
 	return ts
 }
@@ -75,10 +82,29 @@ func (n *Node[T]) ToArray() []T {
 // # FOLLOW UP
 //
 // How would you solve this problem if a temporary buffer is not allowed?
-func RemoveDups() {}
+func RemoveDups[T comparable](l *LinkedList[T]) *LinkedList[T] {
+	result := &LinkedList[T]{}
+	*result = *l
+	node := result.Root
+	var preNode *Node[T]
+	data := make(map[T]struct{})
+	for node != nil {
+		if _, exist := data[node.Data]; exist {
+			// remove data
+			preNode.Next = node.Next
+		} else {
+			data[node.Data] = struct{}{}
+			preNode = node
+		}
+		node = node.Next
+	}
+	return result
+}
 
 // Return Kth to Last: Implement an algorithm to find the kth to last element of a singly linked list.
-func ReturnKthToLast() {}
+func ReturnKthToLast[T any](l *LinkedList[T]) {
+
+}
 
 // Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but
 // the first and last node, not necessarily the exact middle) of a singly linked list, given only access to

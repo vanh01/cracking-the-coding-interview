@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
 	linkedlists "github.com/vanh01/cracking-the-coding-interview/LinkedLists"
 )
 
@@ -132,5 +133,57 @@ func TestDeleteAt(t *testing.T) {
 		}
 		linkedList.DeleteAt(testCase.index)
 		require.Equal(t, testCase.result, linkedList.Root.ToArray())
+	}
+}
+
+func TestRemoveDups(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		result []int
+	}{
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			result: []int{1, 2, 3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{
+						Data: 3,
+						Next: &linkedlists.Node[int]{Data: 3},
+					},
+				},
+			},
+			result: []int{1, 2, 3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 1,
+					Next: &linkedlists.Node[int]{
+						Data: 1,
+						Next: &linkedlists.Node[int]{Data: 1},
+					},
+				},
+			},
+			result: []int{1},
+		},
+	}
+
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		result := linkedlists.RemoveDups[int](linkedList)
+		require.Equal(t, testCase.result, result.Root.ToArray())
 	}
 }
