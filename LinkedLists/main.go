@@ -174,7 +174,29 @@ func DeleteMiddleNode[T any](l *LinkedList[T]) {
 // Input: 3 -> 5 -> 8 -> 5 -> 10 -> 2 -> 1 [partition= 5]
 //
 // Output: 3 -> 1 -> 2 -> 10 -> 5 -> 5 -> 8
-func Partition() {}
+func Partition[T ~int](l *LinkedList[T], partition T) {
+	arr := l.Root.ToArray()
+	left := 0
+	right := len(arr) - 1
+
+	for left < right {
+		if arr[left] >= partition {
+			for arr[right] >= partition && left < right {
+				right--
+			}
+			arr[left], arr[right] = arr[right], arr[left]
+		}
+		left++
+	}
+
+	node := l.Root
+	i := 0
+	for node != nil && i < len(arr) {
+		node.Data = arr[i]
+		node = node.Next
+		i++
+	}
+}
 
 // Sum Lists: You have two numbers represented by a linked list, where each node contains a single
 // digit. The digits are stored in reverse order, such that the 1 's digit is at the head of the list. Write a

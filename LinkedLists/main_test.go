@@ -2,6 +2,7 @@ package linkedlists_test
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -147,7 +148,7 @@ func randomNode(l int) *linkedlists.Node[int] {
 	node := root
 	for i := 1; i < l; i++ {
 		node.Next = &linkedlists.Node[int]{
-			Data: i + 1,
+			Data: rand.Intn(l),
 		}
 		node = node.Next
 	}
@@ -329,5 +330,43 @@ func TestDeleteMiddleNode(t *testing.T) {
 		}
 		linkedlists.DeleteMiddleNode[int](linkedList)
 		require.Equal(t, expected, linkedList.Root.ToArray())
+	}
+}
+
+func TestPartition(t *testing.T) {
+
+	check := func(root *linkedlists.Node[int], partition int) bool {
+		flag := false
+		node := root
+
+		for node != nil {
+			if flag && node.Data < partition {
+				return false
+			}
+			if node.Data >= partition {
+				flag = true
+			}
+			node = node.Next
+		}
+		return true
+	}
+
+	testCases := []struct {
+		node      *linkedlists.Node[int]
+		partition int
+		check     func(*linkedlists.Node[int], int) bool
+	}{
+		{node: randomNode(10), partition: rand.Intn(8), check: check},
+		{node: randomNode(30), partition: rand.Intn(20), check: check},
+	}
+
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		fmt.Println(linkedList.Root.ToArray(), testCase.partition)
+		linkedlists.Partition[int](linkedList, testCase.partition)
+		fmt.Println(linkedList.Root.ToArray())
+		require.True(t, testCase.check(linkedList.Root, testCase.partition))
 	}
 }
