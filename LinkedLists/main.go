@@ -260,6 +260,45 @@ func SumLists[T ~int](l1 *LinkedList[T], l2 *LinkedList[T]) *LinkedList[T] {
 	return result
 }
 
+func SumListsV2[T ~int](l1 *LinkedList[T], l2 *LinkedList[T]) *LinkedList[T] {
+	var num1 T = 0
+	var num2 T = 0
+
+	node := l1.Root
+	i := 0
+	for node != nil {
+		num1 = num1*10 + node.Data
+		node = node.Next
+		i++
+	}
+
+	node2 := l2.Root
+	i = 0
+	for node2 != nil {
+		num2 = num2*10 + node2.Data
+		node2 = node2.Next
+		i++
+	}
+	fmt.Println(":::", num1, num2)
+
+	sum := num1 + num2
+
+	node = &Node[T]{
+		Data: sum % 10,
+	}
+	sum /= 10
+
+	for sum > 0 {
+		newNode := &Node[T]{Next: node}
+		node = newNode
+		data := sum % 10
+		node.Data = data
+		sum /= 10
+	}
+
+	return &LinkedList[T]{Root: node}
+}
+
 // Palindrome: Implement a function to check if a linked list is a palindrome.
 func Palindrome() {}
 

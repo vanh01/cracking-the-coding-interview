@@ -458,3 +458,91 @@ func TestSumLists(t *testing.T) {
 		require.Equal(t, testCase.result, result.Root.ToArray())
 	}
 }
+
+func TestSumListsV2(t *testing.T) {
+	testCases := []struct {
+		num1   *linkedlists.Node[int]
+		num2   *linkedlists.Node[int]
+		result []int
+	}{
+		{
+			num1: &linkedlists.Node[int]{
+				Data: 0,
+			},
+			num2: &linkedlists.Node[int]{
+				Data: 0,
+			},
+			result: []int{0},
+		},
+		{
+			num1: &linkedlists.Node[int]{
+				Data: 1,
+			},
+			num2: &linkedlists.Node[int]{
+				Data: 1,
+			},
+			result: []int{2},
+		},
+		{
+			num1: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			num2: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			result: []int{2, 4, 6},
+		},
+		{
+			num1: &linkedlists.Node[int]{
+				Data: 3,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 0},
+				},
+			},
+			num2: &linkedlists.Node[int]{
+				Data: 3,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 0},
+				},
+			},
+			result: []int{6, 0, 0},
+		},
+		{
+			num1: &linkedlists.Node[int]{
+				Data: 7,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 0},
+				},
+			},
+			num2: &linkedlists.Node[int]{
+				Data: 3,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 0},
+				},
+			},
+			result: []int{1, 0, 0, 0},
+		},
+	}
+	for _, testCase := range testCases {
+		linkedList1 := &linkedlists.LinkedList[int]{
+			Root: testCase.num1,
+		}
+		linkedList2 := &linkedlists.LinkedList[int]{
+			Root: testCase.num2,
+		}
+		result := linkedlists.SumListsV2[int](linkedList1, linkedList2)
+		require.Equal(t, testCase.result, result.Root.ToArray())
+	}
+}
