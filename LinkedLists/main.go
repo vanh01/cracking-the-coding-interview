@@ -1,6 +1,9 @@
 package linkedlists
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type Node[T any] struct {
 	Data T
@@ -217,7 +220,45 @@ func Partition[T ~int](l *LinkedList[T], partition T) {
 // lnput: (6 -> 1 -> 7) + (2 -> 9 -> 5).That is, 617 + 295.
 //
 // Output: 9 -> 1 -> 2. That is, 912.
-func SumLists() {}
+func SumLists[T ~int](l1 *LinkedList[T], l2 *LinkedList[T]) *LinkedList[T] {
+	var num1 T = 0
+	var num2 T = 0
+
+	node := l1.Root
+	i := 0
+	for node != nil {
+		num1 += node.Data * T(math.Pow10(i))
+		node = node.Next
+		i++
+	}
+
+	node2 := l2.Root
+	i = 0
+	for node2 != nil {
+		num2 += node2.Data * T(math.Pow10(i))
+		node2 = node2.Next
+		i++
+	}
+
+	sum := num1 + num2
+
+	result := &LinkedList[T]{
+		Root: &Node[T]{
+			Data: sum % 10,
+		},
+	}
+	sum /= 10
+	node = result.Root
+	for sum > 0 {
+		data := sum % 10
+		node.Next = &Node[T]{}
+		node.Next.Data = data
+		node = node.Next
+		sum /= 10
+	}
+
+	return result
+}
 
 // Palindrome: Implement a function to check if a linked list is a palindrome.
 func Palindrome() {}
