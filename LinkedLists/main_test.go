@@ -546,3 +546,43 @@ func TestSumListsV2(t *testing.T) {
 		require.Equal(t, testCase.result, result.Root.ToArray())
 	}
 }
+
+func TestPalindrome(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		result bool
+	}{
+		{
+			node:   &linkedlists.Node[int]{Data: 0},
+			result: true,
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 1},
+				},
+			},
+			result: true,
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 0,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 1},
+				},
+			},
+			result: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		result := linkedlists.Palindrome[int](linkedList)
+		require.Equal(t, testCase.result, result)
+	}
+}

@@ -300,7 +300,23 @@ func SumListsV2[T ~int](l1 *LinkedList[T], l2 *LinkedList[T]) *LinkedList[T] {
 }
 
 // Palindrome: Implement a function to check if a linked list is a palindrome.
-func Palindrome() {}
+func Palindrome[T comparable](l *LinkedList[T]) bool {
+	node := l.Root
+	arr := node.ToArray()
+
+	left := 0
+	right := len(arr) - 1
+
+	for left < right {
+		if arr[left] != arr[right] {
+			return false
+		}
+		left++
+		right--
+	}
+
+	return true
+}
 
 // Intersection: Given two (singly) linked lists, determine if the two lists intersect.
 // Return the intersecting node. Note that the intersection is defined based on reference, not value.
