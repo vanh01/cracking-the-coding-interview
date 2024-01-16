@@ -172,6 +172,24 @@ func PalindromePermutation(s string) bool {
 	return true
 }
 
+// We can use a bit vector to store the appearance of characters, we assume that this string contains
+// only lowercase alphabet characters.
+func PalindromePermutationV2(s string) bool {
+	if len(s) <= 1 {
+		return true
+	}
+	vector := 0
+	for i := 0; i < len(s); i++ {
+		c := 1 << (s[i] - 'a')
+		if vector&c > 0 {
+			vector &= ^c
+		} else {
+			vector |= c
+		}
+	}
+	return vector&(vector-1) == 0
+}
+
 // # 1.5
 //
 // One Away: There are three types of edits that can be performed on strings: insert a character,

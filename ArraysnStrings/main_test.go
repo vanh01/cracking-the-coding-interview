@@ -188,6 +188,47 @@ func TestPalindromePermutation(t *testing.T) {
 	}
 }
 
+func TestPalindromePermutationV2(t *testing.T) {
+	testCases := []struct {
+		S      string
+		Result bool
+	}{
+		{
+			S:      "abcd",
+			Result: false,
+		},
+		{
+			S:      "aa",
+			Result: true,
+		},
+		{
+			S:      "",
+			Result: true,
+		},
+		{
+			S:      "a",
+			Result: true,
+		},
+		{
+			S:      "avcavc",
+			Result: true,
+		},
+		{
+			S:      "avcavcd",
+			Result: true,
+		},
+		{
+			S:      "abcdabcdef",
+			Result: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.PalindromePermutationV2(testCase.S)
+		require.Equal(t, testCase.Result, result)
+	}
+}
+
 func TestOneWay(t *testing.T) {
 	testCases := []struct {
 		S1     string
