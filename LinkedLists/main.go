@@ -364,4 +364,18 @@ func Intersection[T any](l1, l2 *LinkedList[T]) *Node[T] {
 // Input: A -> B -> C -> D -> E -> C [the same C as earlier]
 //
 // Output: C
-func LoopDetection() {}
+func LoopDetection[T any](l *LinkedList[T]) *Node[T] {
+	node := l.Root
+	var dict = make(map[*Node[T]]struct{})
+
+	for node != nil {
+		if _, exist := dict[node]; exist {
+			return node
+		} else {
+			dict[node] = struct{}{}
+		}
+		node = node.Next
+	}
+
+	return nil
+}

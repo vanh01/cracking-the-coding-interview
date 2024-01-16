@@ -647,3 +647,77 @@ func TestIntersection(t *testing.T) {
 		require.Equal(t, testCase.intersection, result)
 	}
 }
+
+func TestLoopDetection(t *testing.T) {
+	testCases := []struct {
+		node     *linkedlists.Node[int]
+		loopNode *linkedlists.Node[int]
+	}{
+		{},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 33},
+				},
+			},
+			loopNode: &linkedlists.Node[int]{
+				Data: 4,
+				Next: &linkedlists.Node[int]{
+					Data: 5,
+					Next: &linkedlists.Node[int]{Data: 6},
+				},
+			},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 33},
+				},
+			},
+		},
+		{
+			loopNode: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 33},
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		node := testCase.node
+		if testCase.node == nil && testCase.loopNode == nil {
+			continue
+		}
+		if node != nil {
+			for node.Next != nil {
+				node = node.Next
+			}
+			node.Next = testCase.loopNode
+		}
+
+		if testCase.loopNode != nil {
+			node = testCase.loopNode
+		}
+		for node.Next != nil {
+			node = node.Next
+		}
+		node.Next = testCase.loopNode
+
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		if linkedList.Root == nil {
+			linkedList.Root = testCase.loopNode
+		}
+
+		result := linkedlists.LoopDetection[int](linkedList)
+		require.Equal(t, testCase.loopNode, result)
+	}
+}
