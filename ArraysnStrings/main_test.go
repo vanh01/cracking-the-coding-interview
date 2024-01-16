@@ -33,6 +33,31 @@ func TestIsUnique(t *testing.T) {
 	}
 }
 
+func TestIsUniqueV2(t *testing.T) {
+	testCases := []struct {
+		Input  string
+		Output bool
+	}{
+		{
+			Input:  "",
+			Output: true,
+		},
+		{
+			Input:  "qwertyuiopasdfghjklzxcvbnm",
+			Output: true,
+		},
+		{
+			Input:  "qwertyuiopasdfghjklzxcvbna",
+			Output: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := arraysnstrings.IsUniqueV2(testCase.Input)
+		require.Equal(t, testCase.Output, result)
+	}
+}
+
 func TestCheckPermutation(t *testing.T) {
 	testCases := []struct {
 		S1     string

@@ -26,6 +26,28 @@ func IsUnique(s string) bool {
 	return true
 }
 
+// We can use a bit vector to store the appearance of characters, we assume that this string contains
+// only lowercase alphabet characters.
+func IsUniqueV2(s string) bool {
+	if len(s) <= 1 {
+		return true
+	}
+	if len(s) > 26 {
+		return false
+	}
+
+	vector := 0
+
+	for i := 0; i < len(s); i++ {
+		c := s[i] - 'a'
+		if vector&(2<<c) > 0 {
+			return false
+		}
+		vector |= 2 << c
+	}
+	return true
+}
+
 type SortString []byte
 
 func (s *SortString) Len() int {
