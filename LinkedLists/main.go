@@ -322,7 +322,34 @@ func Palindrome[T comparable](l *LinkedList[T]) bool {
 // Return the intersecting node. Note that the intersection is defined based on reference, not value.
 // That is, if the kth node of the first linked list is the exact same node (by reference) as the jth
 // node of the second linked list, then they are intersecting.
-func Intersection() {}
+func Intersection[T any](l1, l2 *LinkedList[T]) *Node[T] {
+	node1 := l1.Root
+	node2 := l2.Root
+
+	var dict = make(map[*Node[T]]struct{})
+
+	for node1 != nil || node2 != nil {
+		if _, exist := dict[node1]; exist {
+			return node1
+		} else {
+			dict[node1] = struct{}{}
+		}
+
+		if _, exist := dict[node2]; exist {
+			return node2
+		} else {
+			dict[node2] = struct{}{}
+		}
+		if node1 != nil {
+			node1 = node1.Next
+		}
+		if node2 != nil {
+			node2 = node2.Next
+		}
+	}
+
+	return nil
+}
 
 // Loop Detection: Given a circular linked list, implement an algorithm that returns the node at the
 // beginning of the loop.

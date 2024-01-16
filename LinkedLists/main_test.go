@@ -586,3 +586,64 @@ func TestPalindrome(t *testing.T) {
 		require.Equal(t, testCase.result, result)
 	}
 }
+
+func TestIntersection(t *testing.T) {
+	testCases := []struct {
+		node1        *linkedlists.Node[int]
+		node2        *linkedlists.Node[int]
+		intersection *linkedlists.Node[int]
+	}{
+		{
+			node1: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 2},
+				},
+			},
+			node2:        &linkedlists.Node[int]{Data: 1},
+			intersection: nil,
+		},
+		{
+			node1: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 2},
+				},
+			},
+			node2: &linkedlists.Node[int]{Data: 1},
+			intersection: &linkedlists.Node[int]{
+				Data: 11,
+				Next: &linkedlists.Node[int]{
+					Data: 10,
+					Next: &linkedlists.Node[int]{Data: 12},
+				},
+			},
+		},
+		{
+			node1: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 0,
+					Next: &linkedlists.Node[int]{Data: 2},
+				},
+			},
+			node2:        &linkedlists.Node[int]{Data: 1},
+			intersection: &linkedlists.Node[int]{Data: 11},
+		},
+	}
+
+	for _, testCase := range testCases {
+		linkedList1 := &linkedlists.LinkedList[int]{
+			Root: testCase.node1,
+		}
+		linkedList2 := &linkedlists.LinkedList[int]{
+			Root: testCase.node2,
+		}
+		linkedList1.Append(testCase.intersection)
+		linkedList2.Append(testCase.intersection)
+		result := linkedlists.Intersection[int](linkedList1, linkedList2)
+		require.Equal(t, testCase.intersection, result)
+	}
+}
