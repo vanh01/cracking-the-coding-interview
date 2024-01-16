@@ -1,6 +1,7 @@
 package arraysnstrings_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -96,10 +97,19 @@ func TestCheckPermutation(t *testing.T) {
 		},
 	}
 
+	fmt.Println("Starting checking permustation")
 	for _, testCase := range testCases {
 		result := arraysnstrings.CheckPermutation(testCase.S1, testCase.S2)
 		require.Equal(t, testCase.Result, result)
 	}
+	fmt.Println("--Passed")
+
+	fmt.Println("Starting checking permustationv2")
+	for _, testCase := range testCases {
+		result := arraysnstrings.CheckPermutationV2(testCase.S1, testCase.S2)
+		require.Equal(t, testCase.Result, result)
+	}
+	fmt.Println("--Passed")
 }
 
 func TestURLify(t *testing.T) {

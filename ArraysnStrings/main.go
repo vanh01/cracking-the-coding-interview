@@ -84,6 +84,28 @@ func CheckPermutation(s1, s2 string) bool {
 	return true
 }
 
+func CheckPermutationV2(s1, s2 string) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	l := len(s1)
+	arr := [256]int{}
+
+	for i := 0; i < l; i++ {
+		arr[s1[i]]++
+	}
+
+	for i := 0; i < l; i++ {
+		c := s2[i]
+		arr[c]--
+		if arr[c] < 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
 // # 1.3
 //
 // URLify: Write a method to replace all spaces in a string with '%20'. You may assume that the string
