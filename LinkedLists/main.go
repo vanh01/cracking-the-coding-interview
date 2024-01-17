@@ -146,6 +146,26 @@ func ReturnKthToLast[T any](l *LinkedList[T], k int) *LinkedList[T] {
 	return result
 }
 
+func kthToLastRecursiveHelper[T any](l *Node[T], k int, i *int) *Node[T] {
+	if l == nil {
+		return nil
+	}
+	node := kthToLastRecursiveHelper[T](l.Next, k, i)
+	*i++
+	if *i == k {
+		return l
+	}
+	return node
+}
+
+func ReturnKthToLastRecursive[T any](l *LinkedList[T], k int) *LinkedList[T] {
+	i := 0
+	node := kthToLastRecursiveHelper[T](l.Root, k, &i)
+	return &LinkedList[T]{
+		Root: node,
+	}
+}
+
 // Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but
 // the first and last node, not necessarily the exact middle) of a singly linked list, given only access to
 // that node.

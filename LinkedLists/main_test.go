@@ -308,6 +308,62 @@ func TestReturnKthToLast(t *testing.T) {
 	}
 }
 
+func TestReturnKthToLastRecursive(t *testing.T) {
+	testCases := []struct {
+		node   *linkedlists.Node[int]
+		k      int
+		result []int
+	}{
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			k:      1,
+			result: []int{3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{Data: 3},
+				},
+			},
+			k:      2,
+			result: []int{2, 3},
+		},
+		{
+			node: &linkedlists.Node[int]{
+				Data: 1,
+				Next: &linkedlists.Node[int]{
+					Data: 2,
+					Next: &linkedlists.Node[int]{
+						Data: 3,
+						Next: &linkedlists.Node[int]{
+							Data: 4,
+							Next: &linkedlists.Node[int]{Data: 5},
+						},
+					},
+				},
+			},
+			k:      2,
+			result: []int{4, 5},
+		},
+	}
+
+	for _, testCase := range testCases {
+		linkedList := &linkedlists.LinkedList[int]{
+			Root: testCase.node,
+		}
+		result := linkedlists.ReturnKthToLastRecursive[int](linkedList, testCase.k)
+		require.Equal(t, testCase.result, result.Root.ToArray())
+	}
+}
+
 func TestDeleteMiddleNode(t *testing.T) {
 	testCases := []struct {
 		node   *linkedlists.Node[int]
