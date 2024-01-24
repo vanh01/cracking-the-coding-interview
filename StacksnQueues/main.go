@@ -27,6 +27,10 @@ func (s *Stack) Peek() int {
 	return (*s)[len(*s)-1]
 }
 
+func (s *Stack) IsEmpty() bool {
+	return len(*s) == 0
+}
+
 type StackOpType int
 
 const (
@@ -278,6 +282,30 @@ func (q *MyQueue) ToArray() []int {
 // Sort Stack: Write a program to sort a stack such that the smallest items are on the top. You can use
 // an additional temporary stack, but you may not copy the elements into any other data structure
 // (such as an array). The stack supports the following operations: push, pop, peek, and is Empty.
+func SortStack(stack Stack) Stack {
+	temp := Stack{}
+	min := stack.Peek()
+	for !stack.IsEmpty() {
+		value := stack.Pop()
+		if value < min {
+			min = value
+		}
+		temp.Push(value)
+	}
+
+	ignoredMinValue := false
+	for !temp.IsEmpty() {
+		value := temp.Pop()
+		if !ignoredMinValue && value == min {
+			ignoredMinValue = true
+		} else {
+			stack.Push(value)
+		}
+	}
+	stack.Push(min)
+
+	return stack
+}
 
 // Animal Shelter: An animal shelter, which holds only dogs and cats, operates on a strictly "first in, first
 // out" basis. People must adopt either the "oldest" (based on arrival time) of all animals at the shelter,

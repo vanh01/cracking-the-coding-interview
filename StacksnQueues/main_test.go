@@ -358,3 +358,32 @@ func TestMyQueue(t *testing.T) {
 		}
 	}
 }
+
+func TestSortStack(t *testing.T) {
+	testCases := []struct {
+		stack  stacksnqueues.Stack
+		result stacksnqueues.Stack
+	}{
+		{
+			stack:  []int{2, 3, 4, 1, 2},
+			result: []int{2, 3, 4, 2, 1},
+		},
+		{
+			stack:  []int{2, -1, 4, 1, 2},
+			result: []int{2, 4, 1, 2, -1},
+		},
+		{
+			stack:  []int{2, -1, 4, 1, -1, 2},
+			result: []int{2, 4, 1, -1, 2, -1},
+		},
+		{
+			stack:  []int{2},
+			result: []int{2},
+		},
+	}
+
+	for _, testCase := range testCases {
+		result := stacksnqueues.SortStack(testCase.stack)
+		require.Equal(t, testCase.result, result)
+	}
+}
