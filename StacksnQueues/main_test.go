@@ -257,3 +257,61 @@ func TestStackMin(t *testing.T) {
 		}
 	}
 }
+
+func TestStackOfPlatesPush(t *testing.T) {
+	testCases := []struct {
+		stack stacksnqueues.StackOfPlates
+		ops   []struct {
+			typ              stacksnqueues.StackOpType
+			value            int
+			numberOfSubStack int
+			result           []int
+		}
+	}{
+		{
+			stack: stacksnqueues.NewStackOfPlates(1),
+			ops: []struct {
+				typ              stacksnqueues.StackOpType
+				value            int
+				numberOfSubStack int
+				result           []int
+			}{
+				{typ: stacksnqueues.PUSH, value: 1, numberOfSubStack: 1, result: []int{1}},
+				{typ: stacksnqueues.PUSH, value: 2, numberOfSubStack: 2, result: []int{1, 2}},
+				{typ: stacksnqueues.POP, numberOfSubStack: 1, result: []int{1}},
+			},
+		},
+		{
+			stack: stacksnqueues.NewStackOfPlates(2),
+			ops: []struct {
+				typ              stacksnqueues.StackOpType
+				value            int
+				numberOfSubStack int
+				result           []int
+			}{
+				{typ: stacksnqueues.PUSH, value: 1, numberOfSubStack: 1, result: []int{1}},
+				{typ: stacksnqueues.PUSH, value: 2, numberOfSubStack: 1, result: []int{1, 2}},
+				{typ: stacksnqueues.POP, numberOfSubStack: 1, result: []int{1}},
+				{typ: stacksnqueues.PUSH, value: -1, numberOfSubStack: 1, result: []int{1, -1}},
+				{typ: stacksnqueues.PUSH, value: 0, numberOfSubStack: 2, result: []int{1, -1, 0}},
+				{typ: stacksnqueues.POP, numberOfSubStack: 1, result: []int{1, -1}},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		stack := testCase.stack
+		for _, op := range testCase.ops {
+			switch op.typ {
+			case stacksnqueues.PUSH:
+				stack.Push(op.value)
+				require.Equal(t, op.numberOfSubStack, stack.NumberOfSubStack())
+				require.Equal(t, op.result, stack.ToArray())
+			case stacksnqueues.POP:
+				stack.Pop()
+				require.Equal(t, op.numberOfSubStack, stack.NumberOfSubStack())
+				require.Equal(t, op.result, stack.ToArray())
+			}
+		}
+	}
+}

@@ -181,9 +181,63 @@ func (t *StackMin) ToArray() []int {
 // SetOfStacks. push() and SetOfStacks. pop() should behave identically to a single stack
 // (that is, pop () should return the same values as it would if there were just a single stack).
 //
-// FOLLOW UP
+// # FOLLOW UP
 //
 // Implement a function popAt (int index) which performs a pop operation on a specific sub-stack.
+type StackOfPlates struct {
+	stacks    []Stack
+	threshold int
+}
+
+func NewStackOfPlates(threshold int) StackOfPlates {
+	if threshold < 1 {
+		threshold = 1
+	}
+	return StackOfPlates{
+		threshold: threshold,
+	}
+}
+
+func (s *StackOfPlates) Push(value int) {
+	if len(s.stacks) == 0 {
+		s.stacks = append(s.stacks, Stack{})
+	}
+	lastIndex := len(s.stacks) - 1
+	lenLastStack := len(s.stacks[lastIndex])
+
+	if lenLastStack == s.threshold {
+		newStack := Stack{}
+		newStack.Push(value)
+		s.stacks = append(s.stacks, newStack)
+	} else {
+		s.stacks[lastIndex].Push(value)
+	}
+}
+
+func (s *StackOfPlates) Pop() int {
+	l := len(s.stacks)
+	lastIndex := len(s.stacks) - 1
+	value := s.stacks[lastIndex].Pop()
+	lenLastStack := len(s.stacks[lastIndex])
+
+	if lenLastStack == 0 && l > 1 {
+		s.stacks = s.stacks[:l-1]
+	}
+
+	return value
+}
+
+func (s *StackOfPlates) NumberOfSubStack() int {
+	return len(s.stacks)
+}
+
+func (s *StackOfPlates) ToArray() []int {
+	var result []int
+	for _, stack := range s.stacks {
+		result = append(result, stack...)
+	}
+	return result
+}
 
 // Queue via Stacks: Implement a MyQueue class which implements a queue using two stacks.
 
