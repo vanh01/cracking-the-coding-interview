@@ -195,3 +195,65 @@ func TestIsEmpty(t *testing.T) {
 		}
 	}
 }
+
+func TestStackMin(t *testing.T) {
+	testCases := []struct {
+		stack stacksnqueues.StackMin
+		ops   []struct {
+			typ    stacksnqueues.StackOpType
+			value  int
+			min    int
+			result []int
+		}
+	}{
+		{
+			stack: stacksnqueues.StackMin{},
+			ops: []struct {
+				typ    stacksnqueues.StackOpType
+				value  int
+				min    int
+				result []int
+			}{
+				{
+					typ:    stacksnqueues.PUSH,
+					value:  1,
+					min:    1,
+					result: []int{1},
+				},
+				{
+					typ:    stacksnqueues.PUSH,
+					value:  2,
+					min:    1,
+					result: []int{1, 2},
+				},
+				{
+					typ:    stacksnqueues.PUSH,
+					value:  0,
+					min:    0,
+					result: []int{1, 2, 0},
+				},
+				{
+					typ:    stacksnqueues.POP,
+					min:    1,
+					result: []int{1, 2},
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		stack := testCase.stack
+		for _, op := range testCase.ops {
+			switch op.typ {
+			case stacksnqueues.PUSH:
+				stack.Push(op.value)
+				require.Equal(t, op.min, stack.Min())
+				require.Equal(t, op.result, stack.ToArray())
+			case stacksnqueues.POP:
+				stack.Pop()
+				require.Equal(t, op.min, stack.Min())
+				require.Equal(t, op.result, stack.ToArray())
+			}
+		}
+	}
+}

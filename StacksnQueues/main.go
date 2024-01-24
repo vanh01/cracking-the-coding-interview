@@ -1,5 +1,40 @@
 package stacksnqueues
 
+type Stack []int
+
+func (s *Stack) Length() int {
+	return len(*s)
+}
+
+func (s *Stack) Push(value int) {
+	*s = append(*s, value)
+}
+
+func (s *Stack) Pop() int {
+	if len(*s) == 0 {
+		return 0
+	}
+	l := len(*s)
+	value := (*s)[l-1]
+	*s = (*s)[:l-1]
+	return value
+}
+
+func (s *Stack) Peek() int {
+	if len(*s) == 0 {
+		return 0
+	}
+	return (*s)[len(*s)-1]
+}
+
+type StackOpType int
+
+const (
+	PUSH StackOpType = 1
+	POP  StackOpType = 2
+	PEEK StackOpType = 3
+)
+
 type StackType int
 
 const (
@@ -106,6 +141,38 @@ func (t *ThreeStack) ToArray() []int {
 
 // Stack Min: How would you design a stack which, in addition to push and pop, has a function min
 // which returns the minimum element? Push, pop and min should all operate in 0(1) time.
+type StackMin struct {
+	stack         Stack
+	stackMinState Stack
+	len           int
+	min           int
+}
+
+func (s *StackMin) Push(value int) {
+	s.stack.Push(value)
+	if s.stackMinState.Length() > 0 && value < s.stackMinState.Peek() {
+		s.stackMinState.Push(value)
+	} else if s.stackMinState.Length() == 0 {
+		s.stackMinState.Push(value)
+	} else {
+		s.stackMinState.Push(s.stackMinState.Peek())
+	}
+	s.len++
+}
+
+func (s *StackMin) Pop() int {
+	s.stackMinState.Pop()
+	s.len--
+	return s.stack.Pop()
+}
+
+func (s *StackMin) Min() int {
+	return s.stackMinState.Peek()
+}
+
+func (t *StackMin) ToArray() []int {
+	return t.stack
+}
 
 // Stack of Plates: Imagine a (literal) stack of plates. If the stack gets too high, it might topple.
 // Therefore, in real life, we would likely start a new stack when the previous stack exceeds some
