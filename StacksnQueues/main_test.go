@@ -315,3 +315,46 @@ func TestStackOfPlatesPush(t *testing.T) {
 		}
 	}
 }
+
+func TestMyQueue(t *testing.T) {
+	testCases := []struct {
+		queue stacksnqueues.MyQueue
+		ops   []struct {
+			typ    stacksnqueues.QueueOpType
+			value  int
+			result []int
+		}
+	}{
+		{
+			queue: stacksnqueues.MyQueue{},
+			ops: []struct {
+				typ    stacksnqueues.QueueOpType
+				value  int
+				result []int
+			}{
+				{typ: stacksnqueues.ENQUEUE, value: 1, result: []int{1}},
+				{typ: stacksnqueues.ENQUEUE, value: 2, result: []int{1, 2}},
+				{typ: stacksnqueues.DEQUEUE, value: 1, result: []int{2}},
+				{typ: stacksnqueues.ENQUEUE, value: 1, result: []int{2, 1}},
+				{typ: stacksnqueues.DEQUEUE, value: 2, result: []int{1}},
+				{typ: stacksnqueues.DEQUEUE, value: 1, result: []int{}},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		queue := testCase.queue
+		for _, op := range testCase.ops {
+			switch op.typ {
+			case stacksnqueues.ENQUEUE:
+				queue.Enqueue(op.value)
+				require.Equal(t, op.result, queue.ToArray())
+			case stacksnqueues.DEQUEUE:
+				value := queue.Dequeue()
+				require.Equal(t, op.value, value)
+				require.Equal(t, op.result, queue.ToArray())
+			}
+		}
+	}
+}

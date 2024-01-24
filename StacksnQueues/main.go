@@ -43,6 +43,13 @@ const (
 	THRID  StackType = 3
 )
 
+type QueueOpType int
+
+const (
+	ENQUEUE QueueOpType = 1
+	DEQUEUE QueueOpType = 2
+)
+
 // Three in One: Describe how you could use a single array to implement three stacks.
 type ThreeStack struct {
 	stack          []int
@@ -240,6 +247,33 @@ func (s *StackOfPlates) ToArray() []int {
 }
 
 // Queue via Stacks: Implement a MyQueue class which implements a queue using two stacks.
+type MyQueue struct {
+	stack  Stack
+	stack1 Stack
+}
+
+func (q *MyQueue) Enqueue(value int) {
+	q.stack.Push(value)
+}
+
+func (q *MyQueue) Dequeue() int {
+	for q.stack.Length() > 0 {
+		temp := q.stack.Pop()
+		q.stack1.Push(temp)
+	}
+	value := q.stack1.Pop()
+
+	for q.stack1.Length() > 0 {
+		temp := q.stack1.Pop()
+		q.stack.Push(temp)
+	}
+
+	return value
+}
+
+func (q *MyQueue) ToArray() []int {
+	return q.stack
+}
 
 // Sort Stack: Write a program to sort a stack such that the smallest items are on the top. You can use
 // an additional temporary stack, but you may not copy the elements into any other data structure
