@@ -387,3 +387,134 @@ func TestSortStack(t *testing.T) {
 		require.Equal(t, testCase.result, result)
 	}
 }
+
+func TestAnimalShelter(t *testing.T) {
+	testCases := []struct {
+		queue stacksnqueues.AnimalShelter
+		ops   []struct {
+			typ       stacksnqueues.QueueOpType
+			animalTyp stacksnqueues.AnimalType
+			value     stacksnqueues.Animal
+			result    []stacksnqueues.Animal
+		}
+	}{
+		{
+			queue: stacksnqueues.AnimalShelter{},
+			ops: []struct {
+				typ       stacksnqueues.QueueOpType
+				animalTyp stacksnqueues.AnimalType
+				value     stacksnqueues.Animal
+				result    []stacksnqueues.Animal
+			}{
+				// toby
+				{
+					typ:    stacksnqueues.ENQUEUE,
+					value:  stacksnqueues.Animal{Name: "toby", Category: stacksnqueues.DOG},
+					result: []stacksnqueues.Animal{{Name: "toby", Category: stacksnqueues.DOG}},
+				},
+				// toby -> toby n
+				{
+					typ:   stacksnqueues.ENQUEUE,
+					value: stacksnqueues.Animal{Name: "toby n", Category: stacksnqueues.DOG},
+					result: []stacksnqueues.Animal{
+						{Name: "toby", Category: stacksnqueues.DOG},
+						{Name: "toby n", Category: stacksnqueues.DOG},
+					},
+				},
+				// toby -> toby n -> toby cat
+				{
+					typ:   stacksnqueues.ENQUEUE,
+					value: stacksnqueues.Animal{Name: "toby cat", Category: stacksnqueues.CAT},
+					result: []stacksnqueues.Animal{
+						{Name: "toby", Category: stacksnqueues.DOG},
+						{Name: "toby n", Category: stacksnqueues.DOG},
+						{Name: "toby cat", Category: stacksnqueues.CAT},
+					},
+				},
+				// toby n -> toby cat
+				{
+					typ:   stacksnqueues.DEQUEUE,
+					value: stacksnqueues.Animal{Name: "toby", Category: stacksnqueues.DOG},
+					result: []stacksnqueues.Animal{
+						{Name: "toby n", Category: stacksnqueues.DOG},
+						{Name: "toby cat", Category: stacksnqueues.CAT},
+					},
+				},
+				// toby n -> toby cat -> toby dog1
+				{
+					typ:   stacksnqueues.ENQUEUE,
+					value: stacksnqueues.Animal{Name: "toby dog1", Category: stacksnqueues.DOG},
+					result: []stacksnqueues.Animal{
+						{Name: "toby n", Category: stacksnqueues.DOG},
+						{Name: "toby cat", Category: stacksnqueues.CAT},
+						{Name: "toby dog1", Category: stacksnqueues.DOG},
+					},
+				},
+				// toby n -> toby dog1
+				{
+					typ:       stacksnqueues.DEQUEUE,
+					animalTyp: stacksnqueues.CAT,
+					value:     stacksnqueues.Animal{Name: "toby cat", Category: stacksnqueues.CAT},
+					result: []stacksnqueues.Animal{
+						{Name: "toby n", Category: stacksnqueues.DOG},
+						{Name: "toby dog1", Category: stacksnqueues.DOG},
+					},
+				},
+				// toby dog1
+				{
+					typ:       stacksnqueues.DEQUEUE,
+					animalTyp: stacksnqueues.DOG,
+					value:     stacksnqueues.Animal{Name: "toby n", Category: stacksnqueues.DOG},
+					result: []stacksnqueues.Animal{
+						{Name: "toby dog1", Category: stacksnqueues.DOG},
+					},
+				},
+				// toby dog1 -> toby cat
+				{
+					typ:   stacksnqueues.ENQUEUE,
+					value: stacksnqueues.Animal{Name: "toby cat", Category: stacksnqueues.CAT},
+					result: []stacksnqueues.Animal{
+						{Name: "toby dog1", Category: stacksnqueues.DOG},
+						{Name: "toby cat", Category: stacksnqueues.CAT},
+					},
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		queue := testCase.queue
+		for _, op := range testCase.ops {
+			switch op.typ {
+			case stacksnqueues.ENQUEUE:
+				queue.Enqueue(op.value)
+				arr := queue.ToArray()
+				require.Equal(t, len(op.result), len(arr))
+				for i, ele := range op.result {
+					require.Equal(t, ele.Name, arr[i].Name)
+					require.Equal(t, ele.Category, arr[i].Category)
+				}
+			case stacksnqueues.DEQUEUE:
+				var value stacksnqueues.Animal
+				var err error
+				switch op.animalTyp {
+				case stacksnqueues.DOG:
+					value, err = queue.DequeueDog()
+				case stacksnqueues.CAT:
+					value, err = queue.DequeueCat()
+				default:
+					value, err = queue.DequeueAny()
+				}
+				require.NoError(t, err)
+				require.Equal(t, op.value.Name, value.Name)
+				require.Equal(t, op.value.Category, value.Category)
+				arr := queue.ToArray()
+				require.Equal(t, len(op.result), len(arr))
+				for i, ele := range op.result {
+					require.Equal(t, ele.Name, arr[i].Name)
+					require.Equal(t, ele.Category, arr[i].Category)
+				}
+			}
+		}
+	}
+}

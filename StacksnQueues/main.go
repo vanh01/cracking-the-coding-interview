@@ -1,5 +1,7 @@
 package stacksnqueues
 
+import "fmt"
+
 type Stack []int
 
 func (s *Stack) Length() int {
@@ -52,6 +54,13 @@ type QueueOpType int
 const (
 	ENQUEUE QueueOpType = 1
 	DEQUEUE QueueOpType = 2
+)
+
+type AnimalType int
+
+const (
+	DOG AnimalType = 1
+	CAT AnimalType = 2
 )
 
 // Three in One: Describe how you could use a single array to implement three stacks.
@@ -313,3 +322,124 @@ func SortStack(stack Stack) Stack {
 // that type). They cannot select which specific animal they would like. Create the data structures to
 // maintain this system and implement operations such as enqueue, dequeueAny, dequeueDog,
 // and dequeueCat. You may use the built-in Linked list data structure.
+type AnimalShelter struct {
+	queue Queue
+}
+
+func (a *AnimalShelter) Enqueue(animal Animal) {
+	a.queue.Enqueue(animal)
+}
+
+func (a *AnimalShelter) DequeueAny() (Animal, error) {
+	return a.queue.Dequeue()
+}
+
+func (a *AnimalShelter) DequeueDog() (Animal, error) {
+	tempQueue := Queue{}
+	var result Animal
+	flag := false
+	for !a.queue.IsEmpty() {
+		value, err := a.queue.Dequeue()
+		if err != nil {
+			return result, err
+		}
+		if value.Category == DOG && !flag {
+			result = value
+			flag = true
+			continue
+		}
+		tempQueue.Enqueue(value)
+	}
+
+	a.queue = tempQueue
+
+	return result, nil
+}
+
+func (a *AnimalShelter) DequeueCat() (Animal, error) {
+	tempQueue := Queue{}
+	var result Animal
+	flag := false
+	for !a.queue.IsEmpty() {
+		value, err := a.queue.Dequeue()
+		if err != nil {
+			return result, err
+		}
+		if value.Category == CAT && !flag {
+			result = value
+			flag = true
+			continue
+		}
+		tempQueue.Enqueue(value)
+	}
+
+	a.queue = tempQueue
+
+	return result, nil
+}
+
+func (a *AnimalShelter) ToArray() []Animal {
+	return a.queue.ToArray()
+}
+
+type Animal struct {
+	Name     string
+	Category AnimalType
+}
+
+type Node struct {
+	data Animal
+	next *Node
+}
+
+type Queue struct {
+	front *Node
+	rear  *Node
+	size  int
+}
+
+func (q *Queue) Enqueue(data Animal) {
+	newNode := &Node{data: data, next: nil}
+
+	if q.rear == nil {
+		q.front = newNode
+		q.rear = newNode
+	} else {
+		q.rear.next = newNode
+		q.rear = newNode
+	}
+
+	q.size++
+}
+
+func (q *Queue) Dequeue() (Animal, error) {
+	if q.front == nil {
+		return Animal{}, fmt.Errorf("queue is empty")
+	}
+
+	data := q.front.data
+	q.front = q.front.next
+	q.size--
+
+	if q.front == nil {
+		q.rear = nil
+	}
+
+	return data, nil
+}
+
+func (q *Queue) IsEmpty() bool {
+	return q.size == 0
+}
+
+func (q *Queue) ToArray() []Animal {
+	head := q.front
+	var result []Animal
+
+	for head != nil {
+		result = append(result, head.data)
+		head = head.next
+	}
+
+	return result
+}
