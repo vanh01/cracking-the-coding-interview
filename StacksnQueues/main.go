@@ -293,27 +293,17 @@ func (q *MyQueue) ToArray() []int {
 // (such as an array). The stack supports the following operations: push, pop, peek, and is Empty.
 func SortStack(stack Stack) Stack {
 	temp := Stack{}
-	min := stack.Peek()
+
 	for !stack.IsEmpty() {
 		value := stack.Pop()
-		if value < min {
-			min = value
+
+		for !temp.IsEmpty() && value > temp.Peek() {
+			stack.Push(temp.Pop())
 		}
 		temp.Push(value)
 	}
 
-	ignoredMinValue := false
-	for !temp.IsEmpty() {
-		value := temp.Pop()
-		if !ignoredMinValue && value == min {
-			ignoredMinValue = true
-		} else {
-			stack.Push(value)
-		}
-	}
-	stack.Push(min)
-
-	return stack
+	return temp
 }
 
 // Animal Shelter: An animal shelter, which holds only dogs and cats, operates on a strictly "first in, first

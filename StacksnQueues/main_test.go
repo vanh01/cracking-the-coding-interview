@@ -366,15 +366,15 @@ func TestSortStack(t *testing.T) {
 	}{
 		{
 			stack:  []int{2, 3, 4, 1, 2},
-			result: []int{2, 3, 4, 2, 1},
+			result: []int{4, 3, 2, 2, 1},
 		},
 		{
 			stack:  []int{2, -1, 4, 1, 2},
-			result: []int{2, 4, 1, 2, -1},
+			result: []int{4, 2, 2, 1, -1},
 		},
 		{
 			stack:  []int{2, -1, 4, 1, -1, 2},
-			result: []int{2, 4, 1, -1, 2, -1},
+			result: []int{4, 2, 2, 1, -1, -1},
 		},
 		{
 			stack:  []int{2},
